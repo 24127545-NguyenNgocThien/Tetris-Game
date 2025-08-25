@@ -28,7 +28,8 @@ cmake --build build --config Release
 
 ## 4. Điều khiển
 - ↑ : Xoay khối 
-- ↓ : Thả nhanh (soft drop)
+- ↓ : Di chuyển xuống
+- SHIFT-LEFT + ↓ : Thả khối
 - ← / → : Di chuyển trái / phải
 - R : chơi lại khi thua (game over)
 
@@ -37,7 +38,8 @@ cmake --build build --config Release
 include/  # header files
 src/      # source code (.cpp)
 lib/      # thư viện raylib
-resource/ # âm thanh, font
+Sounds/ # âm thanh
+Font/ # kiểu chữ 
 CMakeLists.txt
 ```
 
@@ -47,6 +49,5 @@ CMakeLists.txt
 - **Facade** : lớp `Game` làm giao diện đơn giản, che giấu chi tiết `Grid`, `Block`, input, render.
 
 ## 7. Ghi chú 
-- Lưới 20x10, mỗi ô 50px.
-- Điểm số và tốc độ rơi tăng dần theo level.
-- Âm thanh và font load từ thư mục `resource`.
+- Lưới 20x10, mỗi ô 30px.
+- Điểm số và tốc độ rơi tăng dần theo level, tối đa là level 5
