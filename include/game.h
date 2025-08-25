@@ -1,39 +1,45 @@
 #pragma once
 #include "grid.h"
-#include "block.h"
-#include "position.h"
+#include "blocks.h"
 #include <vector>
 
 class Game
 {
-public:
+private:
+    int lineCleared;
     Grid grid;
-    std::vector<Block> blocks;
     Block currBlock;
     Block nextBlock;
-    std::vector<Block> KhoBlock();
     Block GetRandomBlock();
-    Game();
-    ~Game();
-    void DrawGame();
-    void XuLyBanPhim();
-    void AutoMoveBlockDown();
+    std::vector<Block> blocks;
+    std::vector<Block> GetAllBlock();
+
+    bool BlockFits();
+    bool IsBlockOutSide();
+
+    void LevelUp();
+    void Reset();
+    void DropBlock();
+    void RotationBlock();
     void MoveBlockLeft();
     void MoveBlockRight();
-    void RotateBlock();
-    void DropBlock();
-    void ResetGame();
-    void LockBlock();
-    bool Conllision();
-    int score;
-    bool game_over;
-    void UpdateScore(int row_completed);
+    void UpdateScore(int rowsCleared, int moveDownPoints);
+
+    Sound clearSound;
+    Sound rotateSound;
+    Sound lostSound;
+    Sound placingSound;
+    Sound resetSound;
+public:
+    int pendingRows = 0;
     int level;
-    int row_completed;
-    void LevelUp();
+    int score;
+    bool gameOver;
     Music music;
-    Sound clear;
-    Sound rotate;
-    Sound lost;
-    Sound reset;
+    Game();
+    ~Game();
+    void Draw();
+    void LockBlock();
+    void HandleInput();
+    void MoveBlockDown();
 };

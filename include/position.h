@@ -2,8 +2,9 @@
 
 class Position
 {
+private:
 public:
-    int x;
-    int y;
-    Position(int x, int y);
+    int row;
+    int col;
+    Position(int row, int col);
 };

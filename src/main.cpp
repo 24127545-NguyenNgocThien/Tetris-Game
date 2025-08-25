@@ -1,18 +1,17 @@
-#include "../include/raylib.h"
-#include "../include/game.h"
-#include "../include/color.h"
-#include <iostream>
+#include <raylib.h>
+#include "game.h"
+#include "colors.h"
 #include <string>
-#include <cstring>
+#include <map>
 
-double gLastUpdate = 0;
+double lastUpdateTime = 0;
 
 bool EventTriggered(double interval)
 {
-    double curr_time = GetTime();
-    if(curr_time - gLastUpdate >= interval)
+    double currTime = GetTime();
+    if (currTime - lastUpdateTime >= interval)
     {
-        gLastUpdate = curr_time;
+        lastUpdateTime = currTime;
         return true;
     }
     return false;
@@ -20,50 +19,49 @@ bool EventTriggered(double interval)
 
 int main()
 {
-    InitWindow(750, 1000, "Tetris Game");
+    InitWindow(500, 620, "raylib Tetris");
     SetTargetFPS(60);
 
-    Font font = LoadFontEx("../resource/anonymous_pro_bold.ttf", 36, 0, 0);
+    Font font = LoadFontEx("Font/monogram.ttf", 64, 0, 0);
+    Game game;
+    std::map<int, double> getSpeed = {{0, 0.6}, {1, 0.5}, {2, 0.4}, {3, 0.3}, {4, 0.2}, {5, 0.15}};
 
-    Game tetris;
-
-    while(!WindowShouldClose())
+    while (WindowShouldClose() != true)
     {
-        tetris.XuLyBanPhim();
-        UpdateMusicStream(tetris.music);
-
-        if(EventTriggered(0.5 - tetris.level / 10))
+        UpdateMusicStream(game.music);
+        game.HandleInput();
+        if (EventTriggered(getSpeed[game.level]))
         {
-            tetris.AutoMoveBlockDown();
+            game.MoveBlockDown();
         }
 
         BeginDrawing();
-        ClearBackground(space_blue);
+        ClearBackground(darkBlue);
+        // Vẽ Score
+        DrawTextEx(font, "Score", {358, 15}, 38, 2, WHITE);
+        DrawRectangleRounded({320, 55, 170, 60}, 0.3, 6, lightBlue);
 
-        DrawRectangleRounded({520, 45, 220, 100}, 0.5, 1, glaucous);
-        DrawRectangleRounded({520, 245, 220, 205}, 0.5, 1, glaucous);
-        DrawTextEx(font, "Score", {520, 20}, 36, 2, WHITE);
-        DrawTextEx(font, "Next", {520, 220}, 36, 2, WHITE);
+        std::string scoreText = std::to_string(game.score);
+        Vector2 textSize = MeasureTextEx(font, scoreText.c_str(), 38, 2);
+        DrawTextEx(font, scoreText.c_str(), {320 + (170 - textSize.x) / 2, 65}, 38, 2, WHITE);
 
-        std::string score = std::to_string(tetris.score);
-        char text_score[10];
-        strcpy(text_score, score.c_str());
-        Vector2 textSize = MeasureTextEx(font, text_score, 35, 2);
-        DrawTextEx(font, text_score, {(520 + (220 - textSize.x) / 2), 80}, 36, 2, WHITE);
+        // Vẽ block next
+        DrawTextEx(font, "Next", {368, 175}, 38, 2, WHITE);
+        DrawRectangleRounded({320, 215, 170, 180}, 0.3, 6, lightBlue);
 
-        if(tetris.game_over)
+        // Vẽ Level
+        std::string levelText = "Level: " + std::to_string(game.level);
+        Vector2 levelSize = MeasureTextEx(font, levelText.c_str(), 32, 2);
+        DrawTextEx(font, levelText.c_str(), {320 + (170 - levelSize.x) / 2, 135}, 32, 2, WHITE);
+
+        if (game.gameOver)
         {
-            DrawTextEx(font, "GAME", {545, 500}, 70, 2, WHITE);
-            DrawTextEx(font, "OVER", {575, 560}, 70, 2, WHITE);
-            DrawTextEx(font, "Press R to\nRestart", {520, 900}, 30, 2, YELLOW);
+            DrawTextEx(font, "GAME OVER", {320, 450}, 38, 2, WHITE);
         }
 
-        tetris.DrawGame();
-
+        game.Draw();
         EndDrawing();
     }
 
     CloseWindow();
-
-    return 0;
 }

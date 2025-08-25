@@ -1,14 +1,25 @@
 cmake_minimum_required(VERSION 3.10)
+project(TetrisGame)
 
-project(Tetris_Game)
+# Dùng C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Thêm thư mục header
 include_directories(${CMAKE_SOURCE_DIR}/include)
-link_directories("${CMAKE_SOURCE_DIR}/lib")
 
+# Lấy toàn bộ file .cpp trong src/
 file(GLOB SOURCES "src/*.cpp")
 
-add_executable(Tetris_Game ${SOURCES})
+# Tạo file thực thi
+add_executable(TetrisGame ${SOURCES})
 
-set_target_properties(Tetris_Game PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/../bin")
+# Link raylib + thư viện Windows
+target_link_libraries(TetrisGame ${CMAKE_SOURCE_DIR}/lib/libraylib.a winmm gdi32 opengl32 user32 shell32)
 
-target_link_libraries(Tetris_Game raylib opengl32 gdi32 winmm)
+# Copy resource (Sounds/, Font/) sang thư mục build/bin
+file(COPY ${CMAKE_SOURCE_DIR}/Sounds DESTINATION ${CMAKE_BINARY_DIR}/bin)
+file(COPY ${CMAKE_SOURCE_DIR}/Font DESTINATION ${CMAKE_BINARY_DIR}/bin)
+
+# Xuất file exe vào build/bin
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

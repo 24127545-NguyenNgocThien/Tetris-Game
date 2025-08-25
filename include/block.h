@@ -1,66 +1,25 @@
 #pragma once
-#include "../include/position.h"
-#include "../include/color.h"
-#include <vector>
+#include "colors.h"
+#include "position.h"
 #include <map>
+#include <vector>
 
 class Block
 {
-    public:
-    int id;
-    int state;
-    std::map<int, std::vector<Position>> trang_thai;
-    std::vector<Position> GetTilesPosition();
-    Block();
-    int offset_x;
-    int offset_y;
+protected:
+    int cellSize;
+    int rotationState;
+    int rowOffSet;
+    int colOffSet;
     std::vector<Color> colors;
-    int tiles_size;
-    void DrawBlock(int x, int y);
-    void Move(int x, int y);
-    void Rotate();
-    void UndoRotate();
-};
+    std::map<int, std::vector<Position>> cells;
 
-class IBlock : public Block
-{
-public: 
-    IBlock();
+public:
+    int id;
+    Block();
+    void Draw(int offSetX, int offSetY);
+    void Move(int row, int col);
+    void Rotation();
+    void UndoRotation();
+    std::vector<Position> GetCellPositions();
 };
-
-class JBlock : public Block
-{
-public: 
-    JBlock();
-};
-
-class LBlock : public Block
-{
-public: 
-    LBlock();
-};
-
-class OBlock : public Block
-{
-public: 
-    OBlock();
-};
-
-class SBlock : public Block
-{
-public: 
-    SBlock();
-};
-
-class TBlock : public Block
-{
-public: 
-    TBlock();
-};
-
-class ZBlock : public Block
-{
-public: 
-    ZBlock();
-};
-

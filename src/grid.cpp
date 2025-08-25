@@ -1,59 +1,30 @@
-#include "../include/grid.h"
-#include "../include/color.h"
+#include "grid.h"
+#include "colors.h"
+#include <iostream>
+#include <algorithm>
 
-Grid::Grid()
+void Grid::ClearRow(int row)
 {
-    cell_size = 50;
-    num_cols = 10;
-    num_rows = 20;
-    colors = Bang_Mau();
-    Init();
-}
-
-void Grid::Init()
-{
-    for(int row = 0; row < num_rows; row++)
+    for (int col = 0; col < numCols; col++)
     {
-        for(int col = 0; col < num_cols; col++)
-        {
-            grid[row][col] = 0;
-        }
+        grid[row][col] = 0;
     }
 }
 
-void Grid::DrawGrid()
+void Grid::MoveRowDown(int row, int rowsCleared)
 {
-    for(int row = 0; row < num_rows; row++)
+    for (int col = 0; col < numCols; col++)
     {
-        for(int col = 0; col < num_cols; col++)
-        {
-            // grid[][] = 0 => chưa đc lắp đầy còn = từ 1 -> 7 là đã đc lắp đầy
-            int cell_color = grid[row][col];
-            DrawRectangle(col * cell_size + 11, row * cell_size + 1, cell_size - 1, cell_size - 1, colors[cell_color]);
-            DrawRectangleLines(col * cell_size + 11, row * cell_size + 1, cell_size - 1, cell_size - 1, colors[cell_color]);
-        }
+        grid[row + rowsCleared][col] = grid[row][col];
+        grid[row][col] = 0;
     }
 }
 
-bool Grid::IsOutGrid(Position xy)
+bool Grid::IsRowFull(int row)
 {
-    if(xy.x < 0 || xy.x >= num_cols || xy.y >= num_rows)
+    for (int col = 0; col < numCols; col++)
     {
-        return true;
-    }
-    return false;
-}
-
-bool Grid::IsEmptyCell(Position xy)
-{
-    return grid[xy.y][xy.x] == 0;
-}
-
-bool Grid::IsFullRow(int row)
-{
-    for(int col = 0; col < num_cols; col++)
-    {
-        if(grid[row][col] == 0)
+        if (grid[row][col] == 0)
         {
             return false;
         }
@@ -61,49 +32,137 @@ bool Grid::IsFullRow(int row)
     return true;
 }
 
-void Grid::ClearRow(int row)
+Grid::Grid()
 {
-    for(int col = 0; col < num_cols; col++)
-    {
-        grid[row][col] = 0;
-    }
+    numRows = 20;
+    numCols = 10;
+    cellSize = 30;
+    Initialize();
+    colors = GetCellColors();
 }
 
-// còn xuất hiện lỗi chx fix được (tile sau khi rơi xuống có thể tạo fullrow nhưng lại ko xóa kịp trước khi block khác rơi xuốngxuống)
-int Grid::ClearFullRow()
+void Grid::Initialize()
 {
-    int completed_row = 0;
-    for(int row = num_rows - 1; row >= 0; row--)
+    for (int row = 0; row < numRows; row++)
     {
-        if(IsFullRow(row))
+        for (int col = 0; col < numCols; col++)
         {
-            ClearRow(row);
-            completed_row++;
+            grid[row][col] = 0;
         }
     }
-    if(completed_row > 0)
-    {
-        MoveRowDown();
-    }
-    return completed_row;
 }
 
-void Grid::MoveRowDown()
+void Grid::Print()
 {
-    for(int col = 0; col < num_cols; col++)
+    for (int row = 0; row < numRows; row++)
     {
-        for(int row = num_rows - 2; row >= 0; row--)
+        for (int col = 0; col < numCols; col++)
         {
-            if(grid[row][col] != 0 && grid[row + 1][col] == 0)
+            std::cout << grid[row][col] << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+void Grid::Draw()
+{
+    for (int row = 0; row < numRows; row++)
+    {
+        for (int col = 0; col < numCols; col++)
+        {
+            int cellValue = grid[row][col];
+            Color color = colors[cellValue];
+
+            // Nếu đang flash và hàng này nằm trong rowsToClear
+            if (isFlashing && IsRowMarked(row))
             {
-                int curr_row = row;
-                while(grid[curr_row + 1][col] == 0 && curr_row + 1 < num_rows)
+                if (static_cast<int>((GetTime() - flashStartTime) / 0.2) % 2 == 0) // Nhấp nháy 0.2s
                 {
-                    grid[curr_row + 1][col] = grid[curr_row][col];
-                    grid[curr_row][col] = 0;
-                    curr_row++;
+                    color = LIGHTGRAY;
                 }
             }
+
+            DrawRectangle(col * cellSize + 11, row * cellSize + 11, cellSize - 1, cellSize - 1, color);
         }
     }
+
+    // Sau khi flash xong sẽ xóa + dồn hàng
+    if (FlashFinished())
+    {
+        // Quay ngược danh sách, xóa từ dưới lên trên theo bảng
+        std::sort(rowsToClear.begin(), rowsToClear.end());
+
+        int shift = 0;
+        for (int row = numRows - 1; row >= 0; row--)
+        {
+            if (!rowsToClear.empty() && row == rowsToClear.back())
+            {
+                // Gặp hàng cần xóa sẽ tăng shift, xóa và bỏ khỏi list
+                ClearRow(row);
+                rowsToClear.pop_back();
+                shift++;
+            }
+            else if (shift > 0)
+            {
+                // Dịch hàng hiện tại xuống
+                MoveRowDown(row, shift);
+            }
+        }
+
+        isFlashing = false;
+    }
+}
+
+
+bool Grid::FlashFinished()
+{
+    return (isFlashing && GetTime() - flashStartTime > 0.5);
+}
+
+bool Grid::IsCellOutSide(int row, int col)
+{
+    if (row >= 0 && row < numRows && col >= 0 && col < numCols)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool Grid::IsCellEmpty(int row, int col)
+{
+    if (grid[row][col] == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Grid::IsRowMarked(int row) // Kiểm tra hàng có trong danh sách xóa không
+{
+    for (int r : rowsToClear)
+    {
+        if (r == row)
+            return true;
+    }
+    return false;
+}
+
+int Grid::ClearFullRows() // Lưu danh sách các hàng cần xóa, việc xóa hàng sẽ do Draw() thực hiện
+{
+    rowsToClear.clear();
+    for (int row = numRows - 1; row >= 0; row--)
+    {
+        if (IsRowFull(row))
+        {
+            rowsToClear.push_back(row);
+        }
+    }
+
+    if (!rowsToClear.empty())
+    {
+        isFlashing = true;
+        flashStartTime = GetTime();
+    }
+
+    return rowsToClear.size();
 }
