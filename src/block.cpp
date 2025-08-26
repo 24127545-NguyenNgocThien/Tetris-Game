@@ -2,12 +2,12 @@
 
 Block::Block()
 {
+    rowOffSet = 0;
+    colOffSet = 0;
     cellSize = 30;
     rotationState = 0;
     Colors temp;
     colors = temp.GetCellColors();
-    rowOffSet = 0;
-    colOffSet = 0;
 }
 
 void Block::Move(int rows, int cols)

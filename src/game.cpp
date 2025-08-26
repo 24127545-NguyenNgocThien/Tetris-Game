@@ -3,13 +3,15 @@
 
 Game::Game()
 {
+    level = 0;
+    score = 0;
+    grid = Grid();
+    holdBlock = -1;
+    canHold = true;
     gameOver = false;
     blocks = GetAllBlock();
     currBlock = GetRandomBlock();
     nextBlock = GetRandomBlock();
-    level = 0;
-    score = 0;
-    grid = Grid();
 
     InitAudioDevice();
     music = LoadMusicStream("Sounds/TetrisTheme.mp3");
@@ -25,18 +27,22 @@ Game::Game()
 
 Game::~Game()
 {
+    if (currBlock)
+        delete currBlock;
+    if (nextBlock)
+        delete nextBlock;
+    for (Block *block : blocks)
+    {
+        if (block)
+            delete block;
+    }
+
     UnloadSound(clearSound);
     UnloadSound(rotateSound);
     UnloadSound(lostSound);
     UnloadSound(placingSound);
     UnloadSound(resetSound);
     UnloadMusicStream(music);
-
-    if(currBlock) delete currBlock;
-    if(nextBlock) delete nextBlock;
-    for(Block* block : blocks){
-        if(block) delete block;
-    }
 
     CloseAudioDevice();
 }
@@ -51,6 +57,29 @@ Block *Game::GetRandomBlock()
     Block *block = blocks[randomIndex];
     blocks.erase(blocks.begin() + randomIndex);
     return block;
+}
+
+Block *Game::CreateBlockByID(int id)
+{
+    switch (id)
+    {
+    case 1:
+        return new LBlock();
+    case 2:
+        return new JBlock();
+    case 3:
+        return new IBlock();
+        break;
+    case 4:
+        return new OBlock();
+    case 5:
+        return new SBlock();
+    case 6:
+        return new TBlock();
+    case 7:
+        return new ZBlock();
+    }
+    return nullptr;
 }
 
 std::vector<Block *> Game::GetAllBlock()
@@ -82,18 +111,59 @@ void Game::Draw()
             nextBlock->Draw(270, 270);
             break;
         }
+
+        if (holdBlock != -1)
+        {
+            Block *preview = CreateBlockByID(holdBlock);
+            switch (holdBlock)
+            {
+            case 3:
+                preview->Draw(255, 510);
+                break;
+            case 4:
+                preview->Draw(255, 500);
+                break;
+            default:
+                preview->Draw(270, 490);
+                break;
+            }
+            delete preview;
+        }
     }
+}
+
+void Game::SaveBlock()
+{
+    if (!canHold || gameOver)
+        return;
+
+    if (holdBlock == -1)
+    {
+        holdBlock = currBlock->id;
+        delete currBlock;
+        currBlock = nextBlock;
+        nextBlock = GetRandomBlock();
+    }
+    else
+    {
+        int temp = currBlock->id;
+        delete currBlock;
+        currBlock = CreateBlockByID(holdBlock);
+        holdBlock = temp;
+    }
+
+    canHold = false; // chỉ được hold 1 lần cho đến khi block lock xuống
 }
 
 void Game::LevelUp()
 {
-    if (score >= 5000)
+    if (score >= 8000)
         level = 5;
-    else if (score >= 3000)
+    else if (score >= 6000)
         level = 4;
-    else if (score >= 2000)
+    else if (score >= 3000)
         level = 3;
-    else if (score >= 1000)
+    else if (score >= 1500)
         level = 2;
     else if (score >= 500)
         level = 1;
@@ -104,11 +174,11 @@ void Game::Reset()
     PlaySound(resetSound);
     level = 0;
     score = 0;
+    holdBlock = -1;
     grid.Initialize();
     blocks = GetAllBlock();
     currBlock = GetRandomBlock();
     nextBlock = GetRandomBlock();
-
     ResumeMusicStream(music);
     gameOver = false;
 }
@@ -161,6 +231,9 @@ void Game::HandleInput()
         break;
     case KEY_UP:
         RotateBlock();
+        break;
+    case KEY_Z:
+        SaveBlock();
         break;
     default:
         break;
@@ -230,6 +303,7 @@ void Game::LockBlock()
         pendingRows = rowsToClear;
         PlaySound(clearSound);
     }
+    canHold = true;
 }
 
 void Game::RotateBlock()
@@ -280,7 +354,7 @@ void Game::UpdateScore(int rowsCleared, int moveDownPoints)
     switch (rowsCleared)
     {
     case 1:
-        baseScore = 100;
+        baseScore = 150;
         break;
     case 2:
         baseScore = 300;

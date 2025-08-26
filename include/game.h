@@ -8,12 +8,17 @@ class Game
 private:
     int lineCleared;
     Grid grid;
+
     Block* currBlock;
     Block* nextBlock;
+    int holdBlock;
     Block* GetRandomBlock();
+    Block* CreateBlockByID(int id);
+
     std::vector<Block*> blocks;
     std::vector<Block*> GetAllBlock();
 
+    bool canHold;
     bool BlockFits();
     bool IsBlockOutSide();
 
@@ -39,6 +44,7 @@ public:
     Game();
     ~Game();
     void Draw();
+    void SaveBlock();
     void LockBlock();
     void HandleInput();
     void MoveBlockDown();

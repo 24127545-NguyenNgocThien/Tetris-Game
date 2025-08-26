@@ -49,6 +49,10 @@ int main()
         DrawTextEx(font, "Next", {368, 175}, 38, 2, WHITE);
         DrawRectangleRounded({320, 215, 170, 180}, 0.3, 6, temp.lightBlue);
 
+        // Vẽ hold block
+        DrawTextEx(font, "Hold", {368, 395}, 38, 2, WHITE);
+        DrawRectangleRounded({320, 435, 170, 180}, 0.3, 6, temp.lightBlue);
+
         // Vẽ Level
         std::string levelText = "Level: " + std::to_string(game.level);
         Vector2 levelSize = MeasureTextEx(font, levelText.c_str(), 32, 2);
