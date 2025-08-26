@@ -2,7 +2,7 @@
 
 ## 1. Giới thiệu
 Đây là đồ án môn **Lập Trình Hướng Đối Tượng (OOP)**.  
-Game được xây dựng bằng **C++** và thư viện **raylib**, áp dụng các nguyên lý OOP (`Encapsulation`, `Inheritance`, `Polymorphism`, `Abstraction`) và một số design pattern (`Prototype`, `Template Method`, `Facade`).
+Game được xây dựng bằng **C++** và thư viện **raylib**, áp dụng các nguyên lý OOP (`Encapsulation`, `Inheritance`) và một số design pattern (`Prototype`, `Template Method`, `Facade`).
 
 ## 2. Yêu cầu hệ thống
 - C++ compiler (g++/clang/MSVC).
@@ -23,7 +23,7 @@ make
 ```bash
 cmake -S . -B build
 cmake --build build --config Release
-./bin/Tetris_Game.exe
+Để chạy, vào thư mục build/bin chạy tệp TetrisGame.exe
 ```
 
 ## 4. Điều khiển
@@ -51,3 +51,4 @@ CMakeLists.txt
 ## 7. Ghi chú 
 - Lưới 20x10, mỗi ô 30px.
 - Điểm số và tốc độ rơi tăng dần theo level, tối đa là level 5
+
