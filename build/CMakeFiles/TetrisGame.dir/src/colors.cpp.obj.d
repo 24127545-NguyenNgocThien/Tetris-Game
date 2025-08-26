@@ -1,5 +1,5 @@
-CMakeFiles/TetrisGame.dir/src/colors.cpp.obj: \
- C:\Users\PC\Tetris-Game\src\colors.cpp \
+CMakeFiles/TetrisGame.dir/src/Colors.cpp.obj: \
+ C:\Users\PC\Tetris-Game\src\Colors.cpp \
  C:/Users/PC/Tetris-Game/include/colors.h \
  C:/Users/PC/Tetris-Game/include/raylib.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdarg.h \

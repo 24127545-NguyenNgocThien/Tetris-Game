@@ -3,49 +3,56 @@
 
 class LBlock : public Block
 {
-private:
 public:
     LBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };
 
 class JBlock : public Block
 {
-private:
 public:
     JBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };
 
 class IBlock : public Block
 {
-private:
 public:
     IBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };
 
 class OBlock : public Block
 {
-private:
 public:
     OBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };
 
 class SBlock : public Block
 {
-private:
 public:
     SBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };
 
 class TBlock : public Block
 {
-private:
 public:
     TBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };
 
 class ZBlock : public Block
 {
-private:
 public:
     ZBlock();
+    void Draw(int offSetX, int offSetY) override;
+    std::vector<Position> GetCellPositions() override;
 };

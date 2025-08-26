@@ -8,11 +8,11 @@ class Game
 private:
     int lineCleared;
     Grid grid;
-    Block currBlock;
-    Block nextBlock;
-    Block GetRandomBlock();
-    std::vector<Block> blocks;
-    std::vector<Block> GetAllBlock();
+    Block* currBlock;
+    Block* nextBlock;
+    Block* GetRandomBlock();
+    std::vector<Block*> blocks;
+    std::vector<Block*> GetAllBlock();
 
     bool BlockFits();
     bool IsBlockOutSide();

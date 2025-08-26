@@ -13,12 +13,17 @@ protected:
     int colOffSet;
     std::vector<Color> colors;
     std::map<int, std::vector<Position>> cells;
+
 public:
     int id;
     Block();
-    void Draw(int offSetX, int offSetY);
+    virtual ~Block() {} // destructor ảo
+
+    virtual void Draw(int offSetX, int offSetY) = 0;                 // abstract
+    virtual std::vector<Position> GetCellPositions();            // abstract
+
     void Move(int row, int col);
     void Rotation();
     void UndoRotation();
-    std::vector<Position> GetCellPositions();
+
 };

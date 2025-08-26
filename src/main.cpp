@@ -53,15 +53,21 @@ int main()
         std::string levelText = "Level: " + std::to_string(game.level);
         Vector2 levelSize = MeasureTextEx(font, levelText.c_str(), 32, 2);
         DrawTextEx(font, levelText.c_str(), {320 + (170 - levelSize.x) / 2, 135}, 32, 2, WHITE);
-
+        
+        game.Draw();
         if (game.gameOver)
         {
-            DrawTextEx(font, "GAME OVER", {320, 450}, 38, 2, WHITE);
-        }
+            std::string gameOverText = "GAME OVER";
+            Vector2 textSize = MeasureTextEx(font, gameOverText.c_str(), 38, 2);
+            float x = (500 - textSize.x) / 2 - 88;  // căn giữa theo chiều ngang
+            float y = (620 - textSize.y) / 2;  // căn giữa theo chiều dọc
 
-        game.Draw();
+            // Vẽ khung xám phía sau chữ
+            DrawRectangle(x - 10, y - 10, textSize.x + 20, textSize.y + 20, temp.darkGrey);
+            // Vẽ chữ trắng lên trên
+            DrawTextEx(font, gameOverText.c_str(), {x, y}, 38, 2, WHITE);
+        }
         EndDrawing();
     }
-
     CloseWindow();
 }
