@@ -20,7 +20,7 @@ private:
     void LevelUp();
     void Reset();
     void DropBlock();
-    void RotationBlock();
+    void RotateBlock();
     void MoveBlockLeft();
     void MoveBlockRight();
     void UpdateScore(int rowsCleared, int moveDownPoints);

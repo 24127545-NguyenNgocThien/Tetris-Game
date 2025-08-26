@@ -13,7 +13,6 @@ protected:
     int colOffSet;
     std::vector<Color> colors;
     std::map<int, std::vector<Position>> cells;
-
 public:
     int id;
     Block();

@@ -25,7 +25,7 @@ int main()
     Font font = LoadFontEx("Font/monogram.ttf", 64, 0, 0);
     Game game;
     std::map<int, double> getSpeed = {{0, 0.6}, {1, 0.5}, {2, 0.4}, {3, 0.3}, {4, 0.2}, {5, 0.15}};
-
+    Colors temp;
     while (WindowShouldClose() != true)
     {
         UpdateMusicStream(game.music);
@@ -36,10 +36,10 @@ int main()
         }
 
         BeginDrawing();
-        ClearBackground(darkBlue);
+        ClearBackground(temp.darkBlue);
         // Vẽ Score
         DrawTextEx(font, "Score", {358, 15}, 38, 2, WHITE);
-        DrawRectangleRounded({320, 55, 170, 60}, 0.3, 6, lightBlue);
+        DrawRectangleRounded({320, 55, 170, 60}, 0.3, 6, temp.lightBlue);
 
         std::string scoreText = std::to_string(game.score);
         Vector2 textSize = MeasureTextEx(font, scoreText.c_str(), 38, 2);
@@ -47,7 +47,7 @@ int main()
 
         // Vẽ block next
         DrawTextEx(font, "Next", {368, 175}, 38, 2, WHITE);
-        DrawRectangleRounded({320, 215, 170, 180}, 0.3, 6, lightBlue);
+        DrawRectangleRounded({320, 215, 170, 180}, 0.3, 6, temp.lightBlue);
 
         // Vẽ Level
         std::string levelText = "Level: " + std::to_string(game.level);

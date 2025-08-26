@@ -38,7 +38,8 @@ Grid::Grid()
     numCols = 10;
     cellSize = 30;
     Initialize();
-    colors = GetCellColors();
+    Colors temp;
+    colors = temp.GetCellColors();
 }
 
 void Grid::Initialize()

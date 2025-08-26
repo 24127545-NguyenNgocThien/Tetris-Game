@@ -150,7 +150,7 @@ void Game::HandleInput()
         UpdateScore(0, 1);
         break;
     case KEY_UP:
-        RotationBlock();
+        RotateBlock();
         break;
     default:
         break;
@@ -221,7 +221,7 @@ void Game::LockBlock()
     }
 }
 
-void Game::RotationBlock()
+void Game::RotateBlock()
 {
     if (!gameOver)
     {

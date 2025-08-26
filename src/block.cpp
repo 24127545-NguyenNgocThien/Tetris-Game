@@ -4,7 +4,8 @@ Block::Block()
 {
     cellSize = 30;
     rotationState = 0;
-    colors = GetCellColors();
+    Colors temp;
+    colors = temp.GetCellColors();
     rowOffSet = 0;
     colOffSet = 0;
 }
