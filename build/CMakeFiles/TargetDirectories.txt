@@ -1,0 +1,3 @@
+C:/Users/PC/Tetris-Game/build/CMakeFiles/TetrisGame.dir
+C:/Users/PC/Tetris-Game/build/CMakeFiles/edit_cache.dir
+C:/Users/PC/Tetris-Game/build/CMakeFiles/rebuild_cache.dir
