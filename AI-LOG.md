@@ -34,7 +34,7 @@ tôi nên làm những gì?"<br>
 
 ## 4) Sinh Random Block
 **SV:** "Làm sao để sinh khối ngẫu nhiên trong 7 block"<br> 
-**AI(tóm tắt):** Tạo vector `KhoBlock` chứa pointer trỏ tới từng loại. Dùng `rand() %7 ` để chọn.<br>
+**AI(tóm tắt):** Tạo vector `GetAllBlock()` chứa từng loại block. Dùng `rand() % 7` để chọn.<br>
 **Quyết định:** *Chấp nhận*. Tạo hàm GetRandomBlock() theo chỉ dẫn.
 
 ---
@@ -64,26 +64,26 @@ tôi nên làm những gì?"<br>
 ## 8) Kiếm tra va chạm
 **SV:** "Khi block rơi xuống thì cách nào kiểm tra bóng chạm vào biên của lưới ra sao?"<br>
 **AI(tóm tắt):** Trước khi di chuyển, kiểm tra từng ô của block: nếu ra ngoài lưới hoặc ô grid đã có giá trị khác 0 thì va chạm.<br>
-**Quyết định:** *Chấp nhận*. Thêm `IsBlockOutsie()` và `IsBlockColliding()`.
+**Quyết định:** *Chấp nhận*. Thêm `IsBlockOutSide()` và `BlockFits()`.
 
 ---
 
 ## 9) Xử lý xóa hàng
 **SV:** "Khi 1 hàng đầy thì muốn xóa và các hàng trên nó dịch chuyển xuống thì làm sao?"<br>
 **AI(tóm tắt):** Duyệt từng hàng, nếu tất cả các ô khác 0 thì xóa hàng, dồn các hàng trên xuống.<br>
-**Quyết định:** *Chấp nhận*. Viết `ClearFullRow()`, xử lý theo hướng dẫn của AI và update score.
+**Quyết định:** *Chấp nhận*. Viết `ClearFullRows()`, xử lý theo hướng dẫn của AI và update score.
 
 ---
 
 ## 10) Add Sound
 **SV:** "Làm sao để thêm âm thanh ví dụ như khi xóa hạng hoặc khi game over?"<br>
-**AI(tóm tắt):** Tạo thư mục `resource` chứa các file .wav. Trong class `Game` load bằng:
+**AI(tóm tắt):** Tạo thư mục `Sound` chứa các file .wav. Trong class `Game` load bằng:
 ``` bash
 Example:
-Sound clearSound = LoadSound("resource/clear.wav");
-Sound overSound  = LoadSound("resource/gameover.wav");
+Sound clearSound = LoadSound("Sounds/clear.mp3");
+Sound lostSound = LoadSound("Sounds/vgdeathsound.wav");
 ```
-Sau đó trong `ClearFullRows()` gọi `PlaySound(clearSound)` và trong xử lý Game Over gọi `PlaySound(overSound)`. Đừng quên gọi `InitAudioDevice()` lúc khởi tạo và `CloseAudioDevice()` khi thoát game.”<br>
+Sau đó trong `ClearFullRows()` gọi `PlaySound(clearSound)` và trong xử lý Game Over gọi `PlaySound(overSound)`. Gọi `InitAudioDevice()` lúc khởi tạo và `CloseAudioDevice()` khi thoát game.”<br>
 **Quyết định:** *Chấp nhận*. Tạo thư mục `resource` và thêm hàm gọi âm thanh vào class `Game`.
 
 ---
@@ -106,14 +106,7 @@ Sau đó trong `ClearFullRows()` gọi `PlaySound(clearSound)` và trong xử l�
 
 ---
 
-## 13) Điều khiển bàn phím & UI Game Over
-**SV:** "Tự động dò phím trong source và tạo bảng điều khiển người chơi"<br>
-**AI(tóm tắt):** Liệt kê `KEY_LEFT/RIGHT/UP/DOWN/R` với ý nghĩa; thêm hướng dẫn “R để Restart khi Game Over”.  <br>
-**Quyết định:** *Chấp nhận*. Trùng khớp với xử lý phím trong `Game::XuLyBanPhim()`.
-
----
-
-## 14) Đề xuất mở rộng (không bắt buộc)
+## 13) Đề xuất mở rộng (không bắt buộc)
 **SV:** "Gợi ý mở rộng tính năng mà không sửa nhiều kiến trúc"<br>
 **AI(tóm tắt):**
 - Thêm **Command** cho input (dễ bind phím khác/hard-drop).
@@ -123,7 +116,8 @@ Sau đó trong `ClearFullRows()` gọi `PlaySound(clearSound)` và trong xử l�
 
 ---
 
-## 15) Đóng gói tài liệu nộp
+## 14) Đóng gói tài liệu nộp
 **SV:** "Nhắc lại các deliverable theo đề bài và tạo README + AI_LOG chuẩn hoá." <br>
 **AI(tóm tắt):** Tạo `README.md` (build/run, controls, kiến trúc, pattern), `AI_LOG.md` (nhật ký tương tác chính).<br>
+
 **Quyết định:** *Chấp nhận*. Sẽ đặt file vào thư mục `group/report/` theo cấu trúc nộp.
